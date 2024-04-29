@@ -1,0 +1,25 @@
+{
+  "name": "playwright-web-automation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com-personal:alexandrefrei/playwright-web-automation.git",
+  "author": "Alexandre <alexandrefrei@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.43.1",
+    "@types/node": "^20.12.7"
+  },
+  "scripts": {
+    "test:run": "npx playwright test tests/ui/'",
+    "test:run:single": "npx playwright test tests/ui/specs/login.spec.ts --project=chromium",
+    "test:run:all": "npx playwright test tests",
+    "test:run:chromium": "npx playwright test tests/ui/specs/ --project=chromium --headed",
+    "test:run:smoke": "npx playwright test tests/ --grep @smoke --project=chromium --headed",
+    "test:run:Disable-parallelization": "npx playwright test tests/ --workers=1",
+    "test:run:UI-Mode": "npx playwright test --ui tests/ui/specs --project=chromium"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "prettier": "^3.2.5"
+  }
+}
