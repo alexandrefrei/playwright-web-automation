@@ -6,8 +6,9 @@ import dotenv from 'dotenv';
  */
 //require('dotenv').config();
 //dotenv.config();
+
 if (process.env.test_env) {
-  console.log(`AQUI ESTOU PASSANDO ENV: ${process.env.test_env}`);
+  console.log(`Environment: ${process.env.test_env}`);
   dotenv.config({
     path: `.env.${process.env.test_env}`,
     override: true,
@@ -27,7 +28,7 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -41,7 +42,7 @@ export default defineConfig({
 
     testIdAttribute: 'data-test',
   },
-  timeout: 3000,
+  timeout: 6000,
 
   /** Folder for test artifacts such as screenshots, vides, traces, etc */
   //outputDir: 'test-results',

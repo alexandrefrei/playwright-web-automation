@@ -11,12 +11,15 @@
   },
   "scripts": {
     "test:run": "npx playwright test tests/ui/'",
-    "test:run:single": "npx playwright test tests/ui/specs/login.spec.ts --project=chromium",
+    "test:run:single": "npx playwright test tests/ui/specs/login/login.spec.ts --project=chromium --workers=1 --headed",
     "test:run:all": "npx playwright test tests",
     "test:run:chromium": "npx playwright test tests/ui/specs/ --project=chromium --headed",
     "test:run:smoke": "npx playwright test tests/ --grep @smoke --project=chromium --headed",
     "test:run:Disable-parallelization": "npx playwright test tests/ --workers=1",
-    "test:run:UI-Mode": "npx playwright test --ui tests/ui/specs --project=chromium"
+    "test:run:UI-Interactive": "npx playwright test --ui tests/ui/specs/login/login.spec.ts --project=chromium",
+    "test:run:Debug": "npx playwright test tests/ui/specs/buyProducts.spec.ts --project=chromium --workers=1 --headed --debug",
+    "test:run:Buy": "npx playwright test tests/ui/specs/buyProducts.spec.ts --project=chromium --workers=1 --headed",
+    "test:run:UI-Interactive-All": "npx playwright test --ui tests/ui/specs/ --project=chromium"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
