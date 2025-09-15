@@ -49,7 +49,7 @@ jobs:
           keep_reports: 30
           gh_pages: gh-pages
         #
-      - name: Deploy report to Github Pages
+      - name: Publish test report
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
