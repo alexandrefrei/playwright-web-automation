@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
 //login
 
 test.describe('Login Page @smokeTest', () => {
-  test.only('Verify the login page with valid email and password', async () => {
+  test('Verify the login page with valid email and password', async () => {
     console.log(` *** Environment: ${process.env.ENVIRONMENT!}`);
     //const baseURL = test.info().project.use.baseURL!; //How to access the baseURL inside the test
 
