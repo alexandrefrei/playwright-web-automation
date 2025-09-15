@@ -47,7 +47,10 @@ jobs:
           allure_history: allure-history
           allure_report: allure-report
           keep_reports: 30
-          gh_pages: gh-pages
+        #
+      - name: Debug allure-history
+        if: always()
+        run: ls -R allure-history || echo "No allure-history generated"
         #
       - name: Publish test report
         if: always()
