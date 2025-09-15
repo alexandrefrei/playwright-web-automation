@@ -1,4 +1,4 @@
-name: Playwright Allure Reports
+name: Playwright Allure Reports 🚀
 
 on:
   schedule:
@@ -13,7 +13,7 @@ permissions:
 jobs:
   test:
     timeout-minutes: 90
-    name: Running E2E tests
+    name: 🧪 Running E2E tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,16 +21,16 @@ jobs:
         with:
           node-version: lts/*
       #
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm install
       #  
-      - name: Install Playwright Browsers
+      - name: 🖥️ Install Playwright Browsers
         run: npx playwright install
       #  
-      - name: Run Playwright tests
+      - name: 🧾 Run Playwright tests
         run: npx playwright test
       #    
-      - name: Get Allure history
+      - name: 📜 Get Allure history
         uses: actions/checkout@v4
         if: always()
         continue-on-error: true
@@ -38,7 +38,7 @@ jobs:
           ref: gh-pages
           path: gh-pages
       #
-      - name: Generate Allure Report with history
+      - name: 📊 Generate Allure Report with history
         uses: simple-elf/allure-report-action@master
         if: always()
         id: allure-report
@@ -48,11 +48,7 @@ jobs:
           allure_report: allure-report
           keep_reports: 30
         #
-      - name: Debug allure-history
-        if: always()
-        run: ls -R allure-history || echo "No allure-history generated"
-        #
-      - name: Publish test report
+      - name: 🚀 Publish test report
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
