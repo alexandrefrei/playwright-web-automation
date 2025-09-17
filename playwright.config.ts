@@ -1,5 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
+import type { GitHubActionOptions } from '@estruyf/github-actions-reporter'
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -34,7 +35,17 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['list'],
-    ['allure-playwright', { outputFolder: 'allure-results' }]
+    ['allure-playwright', { outputFolder: 'allure-results' }],
+    [
+      '@estruyf/github-actions-reporter',
+      <GitHubActionOptions>{
+        title: 'Playwright Tests Report',
+        useDetails: true,
+        showError: true,
+      },
+    ],
+    ['github'],
+    ['junit', { outputFile: 'test-results/junit-results.xml' }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
