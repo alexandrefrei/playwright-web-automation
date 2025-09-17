@@ -40,7 +40,6 @@ export default defineConfig({
       '@estruyf/github-actions-reporter',
       <GitHubActionOptions>{
         title: 'Playwright Tests Report',
-        useDetails: true,
         showError: true,
       },
     ],
