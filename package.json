@@ -10,7 +10,7 @@
     "@types/node": "^20.12.7",
     "allure-playwright": "^2.0.0",
     "allure-commandline": "^2.14.0",
-    "@estruyf/github-actions-reporter": "^1.10.0",
+    "@estruyf/github-actions-reporter": "^1.10.0"
   },
   "scripts": {
     "test": "playwright test",
