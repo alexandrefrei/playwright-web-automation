@@ -16,6 +16,11 @@ jobs:
     name: 🧪 Running E2E tests
     runs-on: ubuntu-latest
     steps:
+      - name: Get current date
+        id: currentDate
+        run: |
+          echo "date=$(date +'%Y-%m-%d %H-%M')" >> $GITHUB_OUTPUT
+      #    
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -78,11 +83,13 @@ jobs:
           echo "SEM ENV Test Total is: $TEST_TOTAL"
           echo "SEM ENV Test Passed is: $TEST_PASSED"
           echo "SEM ENV Test Faield is: $TEST_FAILED"
+          echo "SEM ENV DATE: $steps.currentDate.outputs.date"
 
           echo "### Test Report ###"
           echo "Test Total is: ${{ env.TEST_TOTAL }}"
           echo "Test Passed is: ${{ env.TST_PASSED }}"
           echo "Test Faield is: ${{ env.TEST_FAILED }}"
+          echo "DATE: ${{ steps.currentDate.date }}"
          
 
       
