@@ -64,3 +64,21 @@ jobs:
           publish_branch: gh-pages
           publish_dir: allure-history
           force_orphan: true
+        #  
+      - name: Parse JUnit summary
+        if: always()
+        run: |
+          sudo apt-get update && sudo apt-get install -y libxml2-utils
+          total=$(xmllint --xpath "string(/testsuites/@tests)" test-results/junit-results.xml)
+          failed=$(xmllint --xpath "string(/testsuites/@failures)" test-results/junit-results.xml)
+          skipped=$(xmllint --xpath "string(/testsuites/@skipped)" test-results/junit-results.xml)
+          errors=$(xmllint --xpath "string(/testsuites/@errors)" test-results/junit-results.xml)
+          passed=$((total - failed - skipped - errors))
+      
+          echo "TEST_TOTAL=$total" >> $GITHUB_ENV
+          echo "TEST_PASSED=$passed" >> $GITHUB_ENV
+          echo "TEST_FAILED=$failed" >> $GITHUB_ENV
+      
+         
+
+      
