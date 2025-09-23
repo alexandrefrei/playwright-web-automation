@@ -83,7 +83,7 @@ jobs:
           echo "SEM ENV Test Total is: $TEST_TOTAL"
           echo "SEM ENV Test Passed is: $TEST_PASSED"
           echo "SEM ENV Test Faield is: $TEST_FAILED"
-          echo "SEM ENV DATE: $steps.currentDate.outputs.date"
+          echo "SEM ENV DATE: ${{ steps.currentDate.outputs.date }}"
 
           echo "### Test Report ###"
           echo "Test Total is: ${{ env.TEST_TOTAL }}"
