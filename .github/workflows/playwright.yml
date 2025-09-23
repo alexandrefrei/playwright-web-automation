@@ -80,9 +80,9 @@ jobs:
           echo "SEM ENV Test Faield is: $TEST_FAILED"
 
           echo "### Test Report ###"
-          echo "Test Total is: {{$env.TEST_TOTAL}}"
-          echo "Test Passed is: {{$env.TST_PASSED}}"
-          echo "Test Faield is: {{$env.TEST_FAILED}}"
+          echo "Test Total is: ${{ env.TEST_TOTAL }}"
+          echo "Test Passed is: ${{ env.TST_PASSED }}"
+          echo "Test Faield is: ${{ env.TEST_FAILED }}"
          
 
       
