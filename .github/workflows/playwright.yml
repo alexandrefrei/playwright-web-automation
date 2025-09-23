@@ -38,14 +38,6 @@ jobs:
           ref: gh-pages
           path: gh-pages
       #
-      - name: Publish XML report
-        uses: dorny/test-reporter@v1
-        if: success() || failure() # run this step even if tests failed
-        with:
-          name: Playwright Tests
-          path: test-results/junit-results.xml
-          reporter: java-junit
-          fail-on-error: true
       - name: 📊 Generate Allure Report with history
         uses: simple-elf/allure-report-action@master
         if: always()
@@ -67,6 +59,7 @@ jobs:
         #  
       - name: Parse JUnit summary
         if: always()
+        id: data
         run: |
           sudo apt-get update && sudo apt-get install -y libxml2-utils
           total=$(xmllint --xpath "string(/testsuites/@tests)" test-results/junit-results.xml)
@@ -74,11 +67,14 @@ jobs:
           skipped=$(xmllint --xpath "string(/testsuites/@skipped)" test-results/junit-results.xml)
           errors=$(xmllint --xpath "string(/testsuites/@errors)" test-results/junit-results.xml)
           passed=$((total - failed - skipped - errors))
-      
           echo "TEST_TOTAL=$total" >> $GITHUB_ENV
           echo "TEST_PASSED=$passed" >> $GITHUB_ENV
           echo "TEST_FAILED=$failed" >> $GITHUB_ENV
-      
+          
+      - name: Adding Markdown
+        if: always()
+        run: |
+          echo "### Cypress Test Report! :rocket:"
          
 
       
