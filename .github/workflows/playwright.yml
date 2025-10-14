@@ -54,6 +54,7 @@ jobs:
           keep_reports: 7
         #
       - name: 🧾 Allure Report Stats
+        if: always()
         run: |
           echo "=========================================="
           echo "📊 Allure Report Statistics"
