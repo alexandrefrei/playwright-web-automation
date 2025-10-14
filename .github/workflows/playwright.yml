@@ -62,8 +62,6 @@ jobs:
           echo "📦 Size: $(du -sh allure-history 2>/dev/null || echo '0')"
           echo "📂 Files: $(find allure-history 2>/dev/null | wc -l)"
           echo "=========================================="
-
-
         #
       - name: 🚀 Publish test report
         if: always()
@@ -73,6 +71,12 @@ jobs:
           publish_branch: gh-pages
           publish_dir: allure-history
         #  
+      - name: 🔍 Check gh-pages branch status
+        if: always()
+        run: |
+          git fetch origin gh-pages || echo "gh-pages not found yet"
+          git branch -r
+
       - name: Parse JUnit summary
         if: always()
         id: data
