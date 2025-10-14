@@ -58,15 +58,13 @@ jobs:
           echo "=========================================="
           echo "📊 Allure Report Statistics"
           echo "------------------------------------------"
-          echo "📦 Size: $(du -sh allure-history 2>/dev/null || echo '0')"
-          echo "📂 Files: $(find allure-history 2>/dev/null | wc -l)"
           echo "=========================================="
 
 
         #
       - name: 🚀 Publish test report
         if: always()
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
