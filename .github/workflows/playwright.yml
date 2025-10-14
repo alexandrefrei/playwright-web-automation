@@ -51,11 +51,16 @@ jobs:
           allure_results: allure-results
           allure_history: allure-history
           allure_report: allure-report
-          keep_reports: 30
+          keep_reports: 7
+        #
+      - name: Check Allure Report size
+        run: du -sh allure-history || true
+      - name: Count files
+        run: find allure-history | wc -l
         #
       - name: 🚀 Publish test report
         if: always()
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
