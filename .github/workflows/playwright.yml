@@ -53,10 +53,16 @@ jobs:
           allure_report: allure-report
           keep_reports: 7
         #
-      - name: Check Allure Report size
-        run: du -sh allure-history || true
-      - name: Count files
-        run: find allure-history | wc -l
+      - name: 🧾 Allure Report Stats
+        run: |
+          echo "=========================================="
+          echo "📊 Allure Report Statistics"
+          echo "------------------------------------------"
+          echo "📦 Size: $(du -sh allure-history 2>/dev/null || echo '0')"
+          echo "📂 Files: $(find allure-history 2>/dev/null | wc -l)"
+          echo "=========================================="
+
+
         #
       - name: 🚀 Publish test report
         if: always()
