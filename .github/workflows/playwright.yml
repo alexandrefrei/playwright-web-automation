@@ -59,6 +59,8 @@ jobs:
           echo "=========================================="
           echo "📊 Allure Report Statistics"
           echo "------------------------------------------"
+          echo "📦 Size: $(du -sh allure-history 2>/dev/null || echo '0')"
+          echo "📂 Files: $(find allure-history 2>/dev/null | wc -l)"
           echo "=========================================="
 
 
