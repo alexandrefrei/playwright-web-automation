@@ -6,7 +6,6 @@ let loginPage: LoginPage;
 
 test.beforeEach(async ({ page }) => {
   await allure.parentSuite('Login')
-  await allure.suite('Core Functionality')
   await page.goto('/');
   // await page.goto('https://admin.cordial.io/#/login');
 
