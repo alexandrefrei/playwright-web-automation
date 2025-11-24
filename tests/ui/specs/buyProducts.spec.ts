@@ -4,6 +4,8 @@ import LoginPage from '../pages/loginPage';
 import HomePage from '../pages/homePage';
 import CartPage from '../pages/cartPage';
 
+import * as allure from 'allure-js-commons'
+
 let loginPage: LoginPage;
 let homePage: HomePage;
 let cartPage: CartPage;
