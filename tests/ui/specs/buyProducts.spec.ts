@@ -11,7 +11,7 @@ let homePage: HomePage;
 let cartPage: CartPage;
 
 test.beforeEach(async ({ page }) => {
-  await allure.parentSuite('Buy Product')
+  await allure.parentSuite('Buy Product');
   await page.goto('/');
   loginPage = new LoginPage(page);
   homePage = new HomePage(page);
