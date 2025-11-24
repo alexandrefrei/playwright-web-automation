@@ -1,4 +1,4 @@
-name: Playwright Allure Reports
+name: Nightly Playwright Tests
 
 on:
   schedule:
@@ -35,76 +35,88 @@ jobs:
       - name: 🧾 Run Playwright tests
         run: npx playwright test
       #    
-      - name: 📜 Get Allure history
-        uses: actions/checkout@v4
+      - name: 📤 Upload Allure Results
+        uses: actions/upload-artifact@v4
         if: always()
-        continue-on-error: true
         with:
-          ref: gh-pages
-          path: gh-pages
-      #
-      - name: 📊 Generate Allure Report with history
-        uses: simple-elf/allure-report-action@master
-        if: always()
-        id: allure-report
-        with:
-          allure_results: allure-results
-          allure_history: allure-history
-          allure_report: allure-report
-          keep_reports: 7
+          name: allure-results
+          path: allure-results/
+  Report:
+      name: 📊 Generate and Publish Allure Report
+      runs-on: ubuntu-latest
+      needs: test
+      if: always()
+      steps:
+        - name: ⬇️ Download Allure Results
+          uses: actions/download-artifact@v4
+          with:
+            name: allure-results
+            path: allure-results
+        - name: 📜 Get Allure history (gh-pages)
+          uses: actions/checkout@v4
+          if: always()
+          continue-on-error: true
+          with:
+            ref: gh-pages
+            path: gh-pages
+            fetch-depth: 1
         #
-      - name: 🧾 Allure Report Stats
-        if: always()
-        run: |
-          echo "=========================================="
-          echo "📊 Allure Report Statistics"
-          echo "------------------------------------------"
-          echo "📦 Size: $(du -sh allure-history 2>/dev/null || echo '0')"
-          echo "📂 Files: $(find allure-history 2>/dev/null | wc -l)"
-          echo "=========================================="
+        - name: 🧹 Clean .git from gh-pages checkout
+          run: rm -rf gh-pages/.git || true
         #
-      - name: 🚀 Publish test report
-        if: always()
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: allure-history
-        #  
-      - name: 🔍 Check gh-pages branch status
-        if: always()
-        run: |
-          git fetch origin gh-pages || echo "gh-pages not found yet"
-          git branch -r
-
-      - name: Parse JUnit summary
-        if: always()
-        id: data
-        run: |
-          sudo apt-get update && sudo apt-get install -y libxml2-utils
-          total=$(xmllint --xpath "string(/testsuites/@tests)" test-results/junit-results.xml)
-          failed=$(xmllint --xpath "string(/testsuites/@failures)" test-results/junit-results.xml)
-          skipped=$(xmllint --xpath "string(/testsuites/@skipped)" test-results/junit-results.xml)
-          errors=$(xmllint --xpath "string(/testsuites/@errors)" test-results/junit-results.xml)
-          passed=$((total - failed - skipped - errors))
-          echo "TEST_TOTAL=$total" >> $GITHUB_ENV
-          echo "TEST_PASSED=$passed" >> $GITHUB_ENV
-          echo "TEST_FAILED=$failed" >> $GITHUB_ENV
-          
-      - name: Test Results
-        if: always()
-        run: |
-          echo "### Test Report ###"
-          echo "SEM ENV Test Total is: $TEST_TOTAL"
-          echo "SEM ENV Test Passed is: $TEST_PASSED"
-          echo "SEM ENV Test Faield is: $TEST_FAILED"
-          echo "SEM ENV DATE: ${{ steps.currentDate.outputs.date }}"
-
-          echo "### Test Report ###"
-          echo "Test Total is: ${{ env.TEST_TOTAL }}"
-          echo "Test Passed is: ${{ env.TST_PASSED }}"
-          echo "Test Faield is: ${{ env.TEST_FAILED }}"
-          echo "DATE: ${{ steps.currentDate.date }}"
+        - name: 📁 Copy previous history
+          run: |
+            mkdir -p allure-history
+            cp -R gh-pages/. allure-history/ || true
+        #    
+        - name: 📊 Generate Allure Report with history
+          uses: simple-elf/allure-report-action@master
+          if: always()
+          id: allure-report
+          with:
+            allure_results: allure-results
+            allure_history: allure-history
+            allure_report: allure-report
+            keep_reports: 7
+          #
+        - name: 🚀 Publish test report
+          if: always()
+          uses: peaceiris/actions-gh-pages@v4
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_branch: gh-pages
+            publish_dir: allure-history
+          #  
+  
+  
+        - name: Parse JUnit summary
+          if: always()
+          id: data
+          run: |
+            sudo apt-get update && sudo apt-get install -y libxml2-utils
+            total=$(xmllint --xpath "string(/testsuites/@tests)" test-results/junit-results.xml)
+            failed=$(xmllint --xpath "string(/testsuites/@failures)" test-results/junit-results.xml)
+            skipped=$(xmllint --xpath "string(/testsuites/@skipped)" test-results/junit-results.xml)
+            errors=$(xmllint --xpath "string(/testsuites/@errors)" test-results/junit-results.xml)
+            passed=$((total - failed - skipped - errors))
+            echo "TEST_TOTAL=$total" >> $GITHUB_ENV
+            echo "TEST_PASSED=$passed" >> $GITHUB_ENV
+            echo "TEST_FAILED=$failed" >> $GITHUB_ENV
+            
+        - name: Test Results
+          if: always()
+          run: |
+            echo "### Test Report ###"
+            echo "SEM ENV Test Total is: $TEST_TOTAL"
+            echo "SEM ENV Test Passed is: $TEST_PASSED"
+            echo "SEM ENV Test Faield is: $TEST_FAILED"
+            echo "SEM ENV DATE: ${{ steps.currentDate.outputs.date }}"
+  
+            echo "### Test Report ###"
+            echo "Test Total is: ${{ env.TEST_TOTAL }}"
+            echo "Test Passed is: ${{ env.TST_PASSED }}"
+            echo "Test Faield is: ${{ env.TEST_FAILED }}"
+            echo "DATE: ${{ steps.currentDate.date }}"
          
 
       
