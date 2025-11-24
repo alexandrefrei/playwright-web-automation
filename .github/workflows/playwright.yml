@@ -63,7 +63,10 @@ jobs:
             fetch-depth: 1
         #
         - name: 🧹 Clean .git from gh-pages checkout
-          run: rm -rf gh-pages/.git || true
+          run: |
+            rm -rf gh-pages/.git || true
+            echo "gh-pages content after we delete .git:"
+            ls -la gh-pages
         #    
         - name: 📊 Generate Allure Report with history
           uses: simple-elf/allure-report-action@master
