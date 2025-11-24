@@ -63,11 +63,6 @@ jobs:
         #
         - name: 🧹 Clean .git from gh-pages checkout
           run: rm -rf gh-pages/.git || true
-        #
-        - name: 📁 Copy previous history
-          run: |
-            mkdir -p allure-history
-            cp -R gh-pages/. allure-history/ || true
         #    
         - name: 📊 Generate Allure Report with history
           uses: simple-elf/allure-report-action@master
