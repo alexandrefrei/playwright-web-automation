@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { USER_EMAIL, PASSWORD } from '../../../support/utils/config';
 import LoginPage from '../../pages/loginPage';
+import * as allure from 'allure-js-commons'
 
 let loginPage: LoginPage;
 
