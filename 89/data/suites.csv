@@ -1,0 +1,5 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","505","Verify the login page with valid email and password","Login","Tue Nov 25 02:04:13 UTC 2025","passed","Tue Nov 25 02:04:13 UTC 2025","Login Page @smokeTest","ui/specs/login/login.spec.ts","",""
+"","5956","Buying the first item Sauce Labs Backpack","Buy Product","Tue Nov 25 02:04:06 UTC 2025","failed","Tue Nov 25 02:04:12 UTC 2025","Buy a Backpack @smokeTest","ui/specs/buyProducts.spec.ts","",""
+"","483","Verify the login page with invalid password","Login","Tue Nov 25 02:04:14 UTC 2025","passed","Tue Nov 25 02:04:14 UTC 2025","Login Page @smokeTest","ui/specs/login/login.spec.ts","",""
+"","434","Verify the login page with invalid email","Login","Tue Nov 25 02:04:13 UTC 2025","passed","Tue Nov 25 02:04:14 UTC 2025","Login Page @smokeTest","ui/specs/login/login.spec.ts","",""
