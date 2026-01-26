@@ -1,4 +1,4 @@
-name: Nightly Run Playwright Tests
+name: Nightly Run Playwright Tests - GH Pages
 
 on:
   schedule:
