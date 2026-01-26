@@ -44,6 +44,20 @@ jobs:
           name: allure-results
           path: allure-results/
       #    
+      - name: 🔍 Inspect Allure Report folder
+        run: |
+          echo "📁 Contents of allure-report:"
+          ls -la ./allure-report
+          echo "📦 Size:"
+          du -sh allure-report    
+      #
+      - name: 🔍 Inspect Allure Results folder
+        run: |
+          echo "📁 Contents of allure-resuts:"
+          ls -la ./allure-results
+          echo "📦 Size:"
+          du -sh allure-results  
+    #
       - name: 📤 Upload Playwright Report
         uses: actions/upload-artifact@v4
         if: always()
@@ -87,9 +101,9 @@ jobs:
       - name: 🔍 Inspect Allure Results folder
         run: |
           echo "📁 Contents of allure-resuts:"
-          ls -la allure-results
+          ls -la ./allure-results
           echo "📦 Size:"
-          du -sh allure-report    
+          du -sh allure-results    
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
