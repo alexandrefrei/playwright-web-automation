@@ -82,6 +82,12 @@ jobs:
           allure_report: allure-report
           keep_reports: 15
       #
+      - name: 📊 Debug file count (optional)
+        run: |
+          echo "Files in allure-report:"
+          find allure-report | wc -l
+          du -sh allure-report
+      #
       - name: 🚀 Publish Test Report
         if: always()
         uses: peaceiris/actions-gh-pages@v4
