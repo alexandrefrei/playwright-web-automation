@@ -76,16 +76,16 @@ jobs:
         continue-on-error: true
         with:
           ref: gh-pages
-          path: gh-pages
+          path: gh-pages-dir # Temporary folder to not conflict with the root
           fetch-depth: 1
           lfs: true
       #
-      - name: 📁 Restore Allure History
+      - name: 📁 Restore Allure History # Copy the history folder of the last report to the folder that the action will use
         run: |
-          mkdir -p allure-history
-          if [ -d "gh-pages/allure-history" ]; then
+          mkdir -p allure-history 
+          if [ -d "gh-pages-dir/history" ]; then
             echo "Restoring Allure history..."
-            cp -R gh-pages/allure-history/. allure-history/
+            cp -R gh-pages-dir/history/. allure-history/
           fi
       #
       - name: 📊 Generate Allure Report with History
