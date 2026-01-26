@@ -76,16 +76,17 @@ jobs:
         continue-on-error: true
         with:
           ref: gh-pages
-          path: gh-pages-dir # Temporary folder to not conflict with the root
+          path: gh-pages # Temporary folder to not conflict with the root
           fetch-depth: 1
           lfs: true
       #
       - name: 📁 Restore Allure History # Copy the history folder of the last report to the folder that the action will use
         run: |
-          mkdir -p allure-history 
-          if [ -d "gh-pages-dir/history" ]; then
+          if [ -d "gh-pages/allure-history" ]; then
             echo "Restoring Allure history..."
-            cp -R gh-pages-dir/history/. allure-history/
+            cp -R gh-pages/allure-history ./allure-history/
+          else
+            echo "No previous Allure history found"
           fi
       #
       - name: 📊 Generate Allure Report with History
@@ -112,7 +113,15 @@ jobs:
           echo "📁 Contents of allure-resuts:"
           ls -la ./allure-results
           echo "📦 Size:"
-          du -sh allure-results    
+          du -sh allure-results 
+          
+      - name: 🔍 Inspect Allure History folder
+        run: |
+          echo "📁 Contents of allure-history:"
+          ls -la ./allure-history
+          echo "📦 Size:"
+          du -sh allure-history    
+      
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
