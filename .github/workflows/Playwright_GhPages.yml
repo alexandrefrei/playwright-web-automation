@@ -1,0 +1,158 @@
+name: Nightly Run Playwright Tests
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # Weekdays at 1:00 AM MST
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to test against:'
+        required: false
+        default: 'qa'
+        type: choice
+        options:
+          - qa
+          - test-environment-1
+          - test-environment-2
+          - test-environment-3
+          - test-environment-4
+          - test-environment-5
+          - test-environment-6
+          - test-environment-7
+          - test-environment-8
+          - test-environment-9
+          - test-environment-10
+          - staging
+          - production-us
+          - production-de
+          - production-ca
+          - production-eu
+          - production-au
+      default_browser:
+        description: 'Default browser for tests (Ubuntu-compatible)'
+        required: false
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - edge
+          - firefox
+      tag_filter:
+        description: 'Filter tests by tag (e.g., @builder, @systemd, @oxygen)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - '@builder'
+          - '@systemd'
+          - '@oxygen'
+          - '@wordwizard'
+          - '@playa'
+          - '@sandbar'
+          - '@datatables'
+          - '@emailservice'
+          - '@openaim'
+          - '@wordprocessingservice'
+          - '@backgroundapps'
+permissions:
+  contents: write
+  actions: read
+  checks: write
+
+jobs:
+  Run_Test:
+    timeout-minutes: 90
+    name: 🧪 Running E2E tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      #
+      - name: 📦 Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      #
+      - name: 📦 Install dependencies
+        run: npm ci
+      #
+      - name: 🖥️ Install Playwright Browsers
+        run: npx playwright install --with-deps
+      #
+      - name: 🧾 Run Playwright tests
+        run: |
+          if [ "${{ inputs.tag_filter || 'all' }}" = "all" ]; then
+            npx playwright test
+          else
+            npx playwright test --grep "${{ inputs.tag_filter }}"
+          fi
+        env:
+          ENVIRONMENT: ${{ inputs.environment || 'qa' }}
+          DEFAULT_BROWSER: ${{ inputs.default_browser || 'chrome' }}
+      #
+      - name: 📤 Upload Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results
+          path: allure-results/
+      #    
+      - name: 📤 Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30    
+
+  Generate_Allure_Report:
+    name: 📊 Generate and Publish Allure Report
+    runs-on: ubuntu-latest
+    needs: Run_Test
+    if: always()
+
+    steps:
+      - name: ⬇️ Download Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+      #
+      - name: 📜 Checkout gh-pages (Allure history source) # Checkout the gh-pages branch to retrieve the historical artifacts from Allure.
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+          fetch-depth: 1
+          lfs: true
+      #
+      - name: 🧹 Clean .git from gh-pages checkout
+        run: rm -rf gh-pages/.git || true
+      #
+      - name: 📁 Restore Allure History # gh-pages ──► allure-history ──► allure-report ──► gh-pages
+        run: |
+          mkdir -p allure-history
+          if [ -d "gh-pages/history" ]; then
+            cp -R gh-pages/history/. allure-history/
+          fi
+      #
+      - name: 📊 Generate Allure Report with History
+        uses: simple-elf/allure-report-action@master
+        id: allure-report
+        with:
+          allure_results: allure-results
+          allure_history: allure-history
+          allure_report: allure-report
+          keep_reports: 15
+      #
+      - name: 🚀 Publish Test Report
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report
+          force_orphan: true
+      #
