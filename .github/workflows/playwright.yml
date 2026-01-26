@@ -71,12 +71,20 @@ jobs:
           name: allure-results
           path: allure-results
       #
+      - name: 📜 Checkout gh-pages (Allure history source) # Checkout the gh-pages branch to retrieve the historical artifacts from Allure.
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+          fetch-depth: 1
+          lfs: true
+      #
       - name: 📊 Generate Allure Report with History
         uses: simple-elf/allure-report-action@master
         with:
           allure_results: allure-results
           allure_history: allure-history
-          allure_report: allure-report
           keep_reports: 15
       #
       - name: Upload artifact for Pages
