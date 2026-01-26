@@ -135,4 +135,11 @@ jobs:
           echo "📁 Contents of allure-history:"
           ls -la ./allure-history
           echo "📦 Size:"
-          du -sh allure-history    
+          du -sh allure-history
+    #     
+      - name: 🔍 Inspect Allure Report folder
+        run: |
+          echo "📁 Contents of root"
+          ls -la   
+      #
+          
