@@ -137,9 +137,14 @@ jobs:
           echo "📦 Size:"
           du -sh allure-history
     #     
-      - name: 🔍 Inspect Allure Report folder
+      - name: 🔍 Inspect Root Folder
         run: |
           echo "📁 Contents of root"
           ls -la   
+      #
+      - name: 🔍 Inspect gh-pages Folder
+        run: |
+          echo "📁 Contents of root"
+          ls -la ./gh-pages   
       #
           
