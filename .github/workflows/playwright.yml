@@ -80,6 +80,14 @@ jobs:
           fetch-depth: 1
           lfs: true
       #
+      - name: 📁 Restore Allure History
+        run: |
+          mkdir -p allure-history
+          if [ -d "gh-pages/history" ]; then
+            echo "Restoring Allure history..."
+            cp -R gh-pages/history/. allure-history/
+          fi
+      #
       - name: 📊 Generate Allure Report with History
         uses: simple-elf/allure-report-action@master
         with:
