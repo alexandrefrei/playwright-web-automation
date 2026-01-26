@@ -57,7 +57,6 @@ jobs:
       #
       - name: 📜 Checkout gh-pages (Allure history source)
         uses: actions/checkout@v4
-        if: always()
         continue-on-error: true
         with:
           ref: gh-pages
@@ -69,13 +68,14 @@ jobs:
         run: rm -rf gh-pages/.git || true
       #  
       - name: 📁 Restore Allure History # gh-pages ──► allure-history ──► allure-report ──► gh-pages
-        if: always()
         run: |
           mkdir -p allure-history
-          cp -R gh-pages/. allure-history/ || true
+          if [ -d "gh-pages/history" ]; then
+            cp -R gh-pages/history/. allure-history/
+          fi
         #
       - name: 📊 Generate Allure Report with History
-        uses: simple-elf/allure-report-action@latest
+        uses: simple-elf/allure-report-action@master
         id: allure-report
         if: always()
         with:
