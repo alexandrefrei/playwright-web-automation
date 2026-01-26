@@ -80,7 +80,7 @@ jobs:
       - name: 🔍 Inspect Allure Report folder
         run: |
           echo "📁 Contents of allure-report:"
-          ls -la allure-report
+          ls -la ./allure-report
           echo "📦 Size:"
           du -sh allure-report    
 
