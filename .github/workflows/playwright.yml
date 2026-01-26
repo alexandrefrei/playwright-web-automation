@@ -59,7 +59,7 @@ jobs:
           path: allure-results
       #
       - name: ⬇️ Download previous Pages artifact (history source)
-        uses: actions/download-pages-artifact@v3
+        uses: actions/download-pages-artifact@v7
         continue-on-error: true
         with:
           path: previous-report
@@ -125,4 +125,22 @@ jobs:
           echo "📁 Contents of root"
           ls -la ./gh-pages   
       #
+      - name: 🔍 Validate downloaded Allure history
+        run: |
+          if [ -d "previous-report/history" ]; then
+            echo "✅ Allure history found:"
+            ls -la previous-report/history
+          else
+            echo "⚠️ No previous Allure history found (first run or reset)"
+          fi
+
+      - name: 🔍 Validate downloaded Previous history
+        run: |
+          if [ -d "previous-report/history" ]; then
+            echo "✅ Allure history found:"
+            ls -la previous-report
+          else
+            echo "⚠️ No previous Allure history found (first run or reset)"
+          fi
+
           
