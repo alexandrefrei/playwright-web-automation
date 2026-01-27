@@ -98,19 +98,19 @@ jobs:
           search_artifacts: true
           if_no_artifact_found: warn
       #    
-      #- name: 📁 Copy folder data-for-allure
+      #- name: 📁 Copy Allure history folder
       #  run: |
-      #    mkdir -p data-for-allure
-      #    if [ -d "previous-history" ]; then
-      #      cp -r previous-history/. data-for-allure/
+      #    mkdir -p gh-pages/last-history
+      #    if [ -d "gh-pages/last-history" ]; then
+      #      cp -r allure-history/last-history/. gh-pages/last-history/
       #    fi
-    #
       - name: 📁 Copy Allure history folder
         run: |
-          mkdir -p gh-pages/last-history
-          if [ -d "gh-pages/last-history" ]; then
-            cp -r allure-history/last-history/. gh-pages/last-history/
+          mkdir -p gh-pages
+          if [ -d "gh-pages" ]; then
+            cp -r allure-history/. gh-pages/
           fi
+          
     #
       - name: 🔍 Inspect Root Folder
         run: |
@@ -178,8 +178,11 @@ jobs:
         run: |
           echo "📁 Contents of allure-resuts:"
           ls -la ./allure-results
-          echo "📦 Size:"
-          du -sh allure-results
+          
+      - name: 🔍 Inspect Allure Results folder
+        run: |
+          echo "📁 Contents of allure-resuts:"
+          ls -la ./allure-results/history
       #    
       - name: 🔍 Inspect Allure Report folder
         run: |
