@@ -107,7 +107,7 @@ jobs:
     #
       - name: 📁 Copy Allure history folder
         run: |
-          mkdir -p gh-pages
+          mkdir -p gh-pages/last-history
           if [ -d "gh-pages/last-history" ]; then
             cp -r allure-history/last-history/. gh-pages/last-history/
           fi
@@ -187,17 +187,7 @@ jobs:
           ls -la ./allure-report
           echo "📦 Size:"
           du -sh allure-report    
-      #
-      - name: 🔍 Inspect data-for-allure folder
-        run: |
-          echo "📁 Contents of allure Last History:"
-          ls -la ./data-for-allure
-      #
-      - name: 🔍 Inspect data-for-allure History folder
-        run: |
-          echo "📁 Contents of allure-history:"
-          ls -la ./data-for-allure/last-history
-          
+      #          
       - name: 🔍 Inspect GH Pages Folder
         run: |
           echo "📁 Contents of GH Pages:"
