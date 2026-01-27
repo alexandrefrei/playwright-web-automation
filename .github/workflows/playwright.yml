@@ -91,8 +91,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v6
         continue-on-error: true
         with:
-          workflow: $WORKFLOW_ID
-          workflow_search: true
+          workflow: ${{ steps.get_workflow_id.outputs.workflow_id }}
           name: history-artifact
           path: previous-history
           search_artifacts: true
@@ -101,7 +100,7 @@ jobs:
       - name: 🔍 Debug workflow & run
         if: always()
         run: |
-          echo "Workflow ID used: $WORKFLOW_ID"
+          echo "Workflow ID used: ${{ steps.get_workflow_id.outputs.workflow_id }}"
           echo "Artifact found: ${{ steps.download_history.outputs.found_artifact }}"
           echo "Source run ID: ${{ steps.download_history.outputs.run_id }}"
           echo "Source run number: ${{ steps.download_history.outputs.run_number }}"
