@@ -86,7 +86,7 @@ jobs:
           fi
 
       - name: 📊 Generate Allure Report
-        uses: simple-elf/allure-report-action@1.13
+        uses: simple-elf/allure-report-action@master
         id: allure-report
         with:
           allure_results: allure-results
