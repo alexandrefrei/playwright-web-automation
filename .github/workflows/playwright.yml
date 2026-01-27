@@ -91,20 +91,15 @@ jobs:
         uses: dawidd6/action-download-artifact@v6
         continue-on-error: true
         with:
-          workflow: ${{ steps.get_workflow_id.outputs.workflow_id }}
+          #workflow: ${{ steps.get_workflow_id.outputs.workflow_id }}
+          workflow: playwright.yml
           workflow_conclusion: completed
           name: history-artifact
           path: allure-history
           search_artifacts: true
           if_no_artifact_found: warn
       #    
-      #- name: 📁 Copy Allure history folder
-      #  run: |
-      #    mkdir -p gh-pages/last-history
-      #    if [ -d "gh-pages/last-history" ]; then
-      #      cp -r allure-history/last-history/. gh-pages/last-history/
-      #    fi
-      - name: 📁 Copy Allure history folder
+      - name: 📁 Copy Allure history to gh-pages folder
         run: |
           mkdir -p gh-pages
           if [ -d "gh-pages" ]; then
@@ -114,7 +109,7 @@ jobs:
     #
       - name: 🔍 Inspect Root Folder
         run: |
-          echo "📁 Contents of root"
+          echo "📁 Contents of root:"
           ls -la   
     #
       - name: 🔍 Inspect allure-history folder
@@ -136,6 +131,16 @@ jobs:
         run: |
           echo "📁 Contents of gh-pages/last-history folder:"
           ls -la ./gh-pages/last-history
+      #
+      - name: 🔍 Inspect Allure Results folder
+        run: |
+          echo "📁 Contents of allure-resuts:"
+          ls -la ./allure-results
+          
+      - name: 🔍 Inspect Allure Results/history folder
+        run: |
+          echo "📁 Contents of allure-resuts/history:"
+          ls -la ./allure-results/history     
     #      
       - name: 📊 Generate Allure Report
         uses: simple-elf/allure-report-action@master
@@ -154,7 +159,7 @@ jobs:
           name: history-artifact
           path: allure-history
           #path: data-for-allure
-          retention-days: 30
+          retention-days: 15
 
       - name: 🏗️ Setup Pages
         uses: actions/configure-pages@v4
@@ -179,17 +184,30 @@ jobs:
           echo "📁 Contents of allure-resuts:"
           ls -la ./allure-results
           
-      - name: 🔍 Inspect Allure Results folder
+      - name: 🔍 Inspect Allure Results/history folder
         run: |
-          echo "📁 Contents of allure-resuts:"
+          echo "📁 Contents of allure-resuts/history:"
           ls -la ./allure-results/history
       #    
       - name: 🔍 Inspect Allure Report folder
         run: |
           echo "📁 Contents of allure-report:"
           ls -la ./allure-report
-          echo "📦 Size:"
-          du -sh allure-report    
+          
+      - name: 🔍 Inspect Allure Report/history folder
+        run: |
+          echo "📁 Contents of allure-report/history:"
+          ls -la ./allure-report/history
+       #   
+      - name: 🔍 Inspect allure-history folder
+        run: |
+          echo "📁 Contents of allure-history folder:"
+          ls -la ./allure-history
+      #
+      - name: 🔍 Inspect allure-history/last-history folder
+        run: |
+          echo "📁 Contents of allure-history/last-history folder:"
+          ls -la ./allure-history/last-history    
       #          
       - name: 🔍 Inspect GH Pages Folder
         run: |
