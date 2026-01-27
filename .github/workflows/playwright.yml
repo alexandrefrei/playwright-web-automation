@@ -62,7 +62,7 @@ jobs:
           path: allure-results
 
       - name: 📜 Download Previous Allure History
-        uses: dawidd6/action-download-artifact@v12
+        uses: dawidd6/action-download-artifact@v6
         continue-on-error: true
         with:
           workflow: ${{ github.event.workflow.id || 'playwright.yml' }}
