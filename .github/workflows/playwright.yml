@@ -65,7 +65,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v6
         continue-on-error: true
         with:
-          workflow: ${{ github.workflow }}
+          workflow: ${{ github.event.workflow.id || 'playwright.yml' }}
           name: allure-history
           path: allure-history
           check_artifacts: true
