@@ -86,7 +86,6 @@ jobs:
           allure_results: allure-results
           allure_history: data-for-allure
           keep_reports: 15
-          gh_pages: .
 
       # Precisamos subir a pasta allure-history como artefato para a PRÓXIMA execução
       - name: 💾 Save History for Next Run
