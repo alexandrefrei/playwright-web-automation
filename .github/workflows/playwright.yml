@@ -117,10 +117,10 @@ jobs:
           echo "📦 Size:"
           du -sh allure-results 
 #
-      - name: 🔍 Inspect Allure History folder
+      - name: 🔍 Inspect Allure Last History folder
         run: |
           echo "📁 Contents of allure-resuts:"
-          ls -la ./allure-results/history
+          ls -la ./allure-history/last-history
           echo "📦 Size:"
           du -sh allure-results 
       #   
