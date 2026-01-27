@@ -106,20 +106,23 @@ jobs:
           echo "Source run ID: ${{ steps.download_history.outputs.run_id }}"
           echo "Source run number: ${{ steps.download_history.outputs.run_number }}"
       #
-      - name: 🔎 List artifacts via GitHub API
-        run: |
-          curl -s \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/actions/artifacts \
-            | jq '.artifacts[] | {name, expired, created_at}'
-      #
       - name: 📁 Clean History
         run: |
           mkdir -p data-for-allure
           if [ -d "previous-history" ]; then
             cp -r previous-history/. data-for-allure/
           fi
-
+    #
+      - name: 🔍 Inspect Root Folder
+        run: |
+          echo "📁 Contents of root"
+          ls -la   
+    #
+      - name: 🔍 Inspect data-for-allure folder
+        run: |
+          echo "📁 Contents of allure Last History:"
+          ls -la ./data-for-allure
+    #      
       - name: 📊 Generate Allure Report
         uses: simple-elf/allure-report-action@master
         with:
