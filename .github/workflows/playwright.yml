@@ -72,6 +72,7 @@ jobs:
         uses: simple-elf/allure-report-action@master
         with:
           allure_results: allure-results
+          keep_reports: 15
       #
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
