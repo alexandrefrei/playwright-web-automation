@@ -114,6 +114,13 @@ jobs:
           echo "📁 Contents of root"
           ls -la   
       #
+      - name: 🔍 Inspect Allure Results folder
+        run: |
+          echo "📁 Contents of allure-resuts:"
+          ls -la ./allure-results
+          echo "📦 Size:"
+          du -sh allure-results
+      #    
       - name: 🔍 Inspect Allure Report folder
         run: |
           echo "📁 Contents of allure-report:"
@@ -121,30 +128,19 @@ jobs:
           echo "📦 Size:"
           du -sh allure-report    
       #
-      - name: 🔍 Inspect Allure Results folder
-        run: |
-          echo "📁 Contents of allure-resuts:"
-          ls -la ./allure-results
-          echo "📦 Size:"
-          du -sh allure-results 
-      #
-      #- name: 🔍 Inspect Allure History folder
-      #  run: |
-      #    echo "📁 Contents of allure-history:"
-      #    ls -la ./allure-history
-      #    echo "📦 Size:"
-      #    du -sh allure-history
-      #    
-      #- name: 🔍 Inspect Allure Last History folder
-      #  run: |
-      #    echo "📁 Contents of allure Last History:"
-      #    ls -la ./allure-history/last-history
-      #    echo "📦 Size:"
-      #    du -sh allure-results 
-      #
-      - name: 🔍 Inspect Allure Last History folder
+      - name: 🔍 Inspect data-for-allure folder
         run: |
           echo "📁 Contents of allure Last History:"
+          ls -la ./data-for-allure
+      #
+      - name: 🔍 Inspect data-for-allure History folder
+        run: |
+          echo "📁 Contents of allure-history:"
+          ls -la ./data-for-allure/last-history
+          
+      - name: 🔍 Inspect GH Pages Folder
+        run: |
+          echo "📁 Contents of GH Pages:"
           ls -la ./gh-pages
           echo "📦 Size:"
           du -sh allure-results 
