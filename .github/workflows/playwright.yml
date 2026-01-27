@@ -136,11 +136,6 @@ jobs:
         run: |
           echo "📁 Contents of allure-resuts:"
           ls -la ./allure-results
-          
-      - name: 🔍 Inspect Allure Results/history folder
-        run: |
-          echo "📁 Contents of allure-resuts/history:"
-          ls -la ./allure-results/history     
     #      
       - name: 📊 Generate Allure Report
         uses: simple-elf/allure-report-action@master
