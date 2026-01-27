@@ -122,10 +122,20 @@ jobs:
           echo "📁 Contents of allure-history folder:"
           ls -la ./allure-history
     #
-      - name: 🔍 Inspect allure-history folder
+      - name: 🔍 Inspect allure-history/last-history folder
         run: |
-          echo "📁 Contents of allure-history folder:"
+          echo "📁 Contents of allure-history/last-history folder:"
+          ls -la ./allure-history/last-history
+    #
+      - name: 🔍 Inspect gh-pages folder
+        run: |
+          echo "📁 Contents of gh-pages folder:"
           ls -la ./gh-pages
+      #
+      - name: 🔍 Inspect gh-pages/last-history folder
+        run: |
+          echo "📁 Contents of gh-pages/last-history folder:"
+          ls -la ./gh-pages/last-history
     #      
       - name: 📊 Generate Allure Report
         uses: simple-elf/allure-report-action@master
