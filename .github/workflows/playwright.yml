@@ -57,12 +57,6 @@ jobs:
         with:
           name: allure-results
           path: allure-results
-      #
-      - name: ⬇️ Download previous Pages artifact (history source)
-        uses: actions/download-pages-artifact@v7
-        continue-on-error: true
-        with:
-          path: previous-report
       # 
       - name: 📁 Restore Allure History
         run: |
@@ -101,7 +95,7 @@ jobs:
           echo "📦 Size:"
           du -sh allure-results 
 #
-      - name: 🔍 Inspect Allure Results folder
+      - name: 🔍 Inspect Allure History folder
         run: |
           echo "📁 Contents of allure-resuts:"
           ls -la ./allure-results/history
