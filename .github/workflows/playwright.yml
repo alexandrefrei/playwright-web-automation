@@ -144,7 +144,7 @@ jobs:
           echo "📦 Size:"
           du -sh allure-results 
       #
-       - name: 🔍 Inspect Allure Last History folder
+      - name: 🔍 Inspect Allure Last History folder
         run: |
           echo "📁 Contents of allure Last History:"
           ls -la ./gh-pages
@@ -152,5 +152,5 @@ jobs:
           du -sh allure-results 
       #   
 
-    #     
+         
      
