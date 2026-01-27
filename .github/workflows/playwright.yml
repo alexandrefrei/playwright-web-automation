@@ -70,7 +70,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v6
         continue-on-error: true
         with:
-          workflow: playwright.yml
+          workflow: .github/workflows/playwright.yml
           name: history-artifact
           path: previous-history
           check_artifacts: true
