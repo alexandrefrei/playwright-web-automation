@@ -79,6 +79,7 @@ jobs:
           allure_results: allure-results
           allure_history: allure-history
           keep_reports: 15
+          gh_pages: gh-pages
           subfolder: allure-history
 
       # Precisamos subir a pasta allure-history como artefato para a PRÓXIMA execução
