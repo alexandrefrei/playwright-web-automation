@@ -71,13 +71,20 @@ jobs:
           check_artifacts: true
           search_artifacts: true
           if_no_artifact_found: warn
+      #    
+      - name: 📁 Prepare History Structure
+        run: |
+          mkdir -p gh-pages/allure-history
+          if [ -d "temp-history" ]; then
+            cp -r temp-history/. gh-pages/allure-history/
+          fi
 
       - name: 📊 Generate Allure Report
         uses: simple-elf/allure-report-action@master
         id: allure-report
         with:
           allure_results: allure-results
-          allure_history: allure-history
+          allure_history: gh-pages/allure-history
           keep_reports: 15
           gh_pages: gh-pages
           subfolder: allure-history
@@ -88,7 +95,7 @@ jobs:
         if: always()
         with:
           name: allure-history
-          path: allure-history
+          path: gh-pages/allure-history
           retention-days: 30
 
       - name: 🏗️ Setup Pages
@@ -134,6 +141,13 @@ jobs:
         run: |
           echo "📁 Contents of allure Last History:"
           ls -la ./allure-history/last-history
+          echo "📦 Size:"
+          du -sh allure-results 
+      #
+       - name: 🔍 Inspect Allure Last History folder
+        run: |
+          echo "📁 Contents of allure Last History:"
+          ls -la ./gh-pages
           echo "📦 Size:"
           du -sh allure-results 
       #   
