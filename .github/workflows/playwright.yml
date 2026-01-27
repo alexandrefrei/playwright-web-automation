@@ -67,16 +67,25 @@ jobs:
           ls -la   
           
       - name: 📜 Download Previous Allure History
+        id: download_history
         uses: dawidd6/action-download-artifact@v6
         continue-on-error: true
         with:
           workflow: .github/workflows/playwright.yml
           name: history-artifact
           path: previous-history
-          check_artifacts: true
           search_artifacts: true
           if_no_artifact_found: warn
       #    
+      - name: 🔍 Print History Download Info
+        if: always()
+        run: |
+          echo "📦 Artifact found: ${{ steps.download_history.outputs.found_artifact }}"
+          echo "🔁 Run ID: ${{ steps.download_history.outputs.run_id }}"
+          echo "🧪 Run Number: ${{ steps.download_history.outputs.run_number }}"
+      #
+
+      
       - name: 📁 Clean History
         run: |
           mkdir -p data-for-allure
