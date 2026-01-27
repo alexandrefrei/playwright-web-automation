@@ -61,31 +61,6 @@ jobs:
           name: allure-results
           path: allure-results
       #    
-      - name: 🔍 Inspect Root Folder
-        run: |
-          echo "📁 Contents of root"
-          ls -la   
-     #     
-      - name: 🔎 Get workflow ID
-        id: get_workflow_id
-        run: |
-            WORKFLOW_NAME="Nightly Playwright Tests"
-        
-            WORKFLOW_ID=$(curl -s \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/${{ github.repository }}/actions/workflows \
-              | jq -r ".workflows[] | select(.name == \"${WORKFLOW_NAME}\") | .id")
-        
-            if [ -z "$WORKFLOW_ID" ] || [ "$WORKFLOW_ID" = "null" ]; then
-              echo "❌ Workflow ID not found"
-              exit 1
-            fi
-        
-            echo "workflow_id=$WORKFLOW_ID" >> $GITHUB_OUTPUT
-            echo "✅ Workflow ID: $WORKFLOW_ID"
-      #
-          
       - name: 📜 Download Previous Allure History
         id: download_history
         uses: dawidd6/action-download-artifact@v6
@@ -99,13 +74,12 @@ jobs:
           search_artifacts: true
           if_no_artifact_found: warn
       #    
-      - name: 📁 Copy Allure history to gh-pages folder
+      - name: 📁 Copy allure-history to gh-pages folder # Allure-history is from artifacts
         run: |
           mkdir -p gh-pages
           if [ -d "gh-pages" ]; then
             cp -r allure-history/. gh-pages/
           fi
-          
     #
       - name: 🔍 Inspect Root Folder
         run: |
@@ -143,31 +117,27 @@ jobs:
           allure_results: allure-results
           allure_report: allure-report
           allure_history: allure-history
-          #allure_history: data-for-allure
           keep_reports: 15
-
-      # Precisamos subir a pasta allure-history como artefato para a PRÓXIMA execução
+     #     
       - name: 💾 Save History for Next Run
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: history-artifact
           path: allure-history
-          #path: data-for-allure
           retention-days: 15
-
+    #
       - name: 🏗️ Setup Pages
         uses: actions/configure-pages@v4
-
+    #
       - name: 📤 Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: allure-report # Pasta final gerada pela action
-
+          path: allure-report
+    #
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-  
      # 
       - name: 🔍 Inspect Root Folder
         run: |
@@ -178,7 +148,7 @@ jobs:
         run: |
           echo "📁 Contents of allure-resuts:"
           ls -la ./allure-results
-          
+      #    
       - name: 🔍 Inspect Allure Results/history folder
         run: |
           echo "📁 Contents of allure-resuts/history:"
@@ -188,12 +158,12 @@ jobs:
         run: |
           echo "📁 Contents of allure-report:"
           ls -la ./allure-report
-          
+      #    
       - name: 🔍 Inspect Allure Report/history folder
         run: |
           echo "📁 Contents of allure-report/history:"
           ls -la ./allure-report/history
-       #   
+      #   
       - name: 🔍 Inspect allure-history folder
         run: |
           echo "📁 Contents of allure-history folder:"
