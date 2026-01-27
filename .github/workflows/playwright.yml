@@ -105,6 +105,13 @@ jobs:
           echo "Source run ID: ${{ steps.download_history.outputs.run_id }}"
           echo "Source run number: ${{ steps.download_history.outputs.run_number }}"
       #
+      - name: 🔎 List artifacts via GitHub API
+        run: |
+          curl -s \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/artifacts \
+            | jq '.artifacts[] | {name, expired, created_at}'
+      #
       - name: 📁 Clean History
         run: |
           mkdir -p data-for-allure
