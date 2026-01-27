@@ -71,7 +71,7 @@ jobs:
         continue-on-error: true
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: 'playwright.yml'
+          workflow: Nightly Playwright Tests
           name: history-artifact
           path: previous-history
           check_artifacts: true
@@ -86,7 +86,7 @@ jobs:
           fi
 
       - name: 📊 Generate Allure Report
-        uses: simple-elf/allure-report-action@1.7
+        uses: simple-elf/allure-report-action@1.13
         id: allure-report
         with:
           allure_results: allure-results
