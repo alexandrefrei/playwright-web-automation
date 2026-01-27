@@ -43,7 +43,7 @@ jobs:
         with:
           name: allure-results
           path: allure-results
-          retention-days: 15
+          retention-days: 5
           
   Generate_and_Deploy_Report:
     name: 📊 Report Generation & Deploy
@@ -117,7 +117,7 @@ jobs:
           allure_results: allure-results
           allure_report: allure-report
           allure_history: allure-history
-          keep_reports: 15
+          keep_reports: 5
      #     
       - name: 💾 Save History for Next Run
         uses: actions/upload-artifact@v4
@@ -125,7 +125,7 @@ jobs:
         with:
           name: history-artifact
           path: allure-history
-          retention-days: 15
+          retention-days: 5
     #
       - name: 🏗️ Setup Pages
         uses: actions/configure-pages@v4
