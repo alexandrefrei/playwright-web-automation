@@ -66,17 +66,17 @@ jobs:
         continue-on-error: true
         with:
           workflow: ${{ github.event.workflow.id || 'playwright.yml' }}
-          name: allure-history
-          path: allure-history
+          name: history-artifact
+          path: previous-history
           check_artifacts: true
           search_artifacts: true
           if_no_artifact_found: warn
       #    
-      - name: 📁 Prepare History Structure
+      - name: 📁 Clean History
         run: |
-          mkdir -p gh-pages/allure-history
-          if [ -d "temp-history" ]; then
-            cp -r temp-history/. gh-pages/allure-history/
+          mkdir -p data-for-allure
+          if [ -d "previous-history" ]; then
+            cp -r previous-history/. data-for-allure/
           fi
 
       - name: 📊 Generate Allure Report
@@ -84,18 +84,17 @@ jobs:
         id: allure-report
         with:
           allure_results: allure-results
-          allure_history: gh-pages/allure-history
+          allure_history: data-for-allure
           keep_reports: 15
-          gh_pages: gh-pages
-          subfolder: allure-history
+          gh_pages: .
 
       # Precisamos subir a pasta allure-history como artefato para a PRÓXIMA execução
       - name: 💾 Save History for Next Run
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: allure-history
-          path: gh-pages/allure-history
+          name: history-artifact
+          path: data-for-allure
           retention-days: 30
 
       - name: 🏗️ Setup Pages
