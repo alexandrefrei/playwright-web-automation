@@ -1,0 +1,186 @@
+name: Nightly Playwright Tests
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+  checks: write
+  pages: write
+  id-token: write
+
+jobs:
+  Run_Test:
+    timeout-minutes: 90
+    name: 🧪 Running E2E tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: currentDate
+        run: |
+          echo "date=$(date +'%Y-%m-%d %H-%M')" >> $GITHUB_OUTPUT
+      #    
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      #
+      - name: 📦 Install dependencies
+        run: npm install
+      #  
+      - name: 🖥️ Install Playwright Browsers
+        run: npx playwright install
+      #  
+      - name: 🧾 Run Playwright tests
+        run: npx playwright test
+      #    
+      - name: 📤 Upload Allure Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results
+          path: allure-results
+          retention-days: 5
+          
+  Generate_and_Deploy_Report:
+    name: 📊 Report Generation & Deploy
+    runs-on: ubuntu-latest
+    needs: Run_Test
+    if: always()
+    
+    steps:
+      - name: 📦 Checkout
+        uses: actions/checkout@v4
+
+      - name: ⬇️ Download Current Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+      #    
+      - name: 📜 Download Previous Allure History
+        id: download_history
+        uses: dawidd6/action-download-artifact@v6
+        continue-on-error: true
+        with:
+          #workflow: ${{ steps.get_workflow_id.outputs.workflow_id }}
+          workflow: playwright.yml
+          workflow_conclusion: completed
+          name: history-artifact
+          path: allure-history
+          search_artifacts: true
+          if_no_artifact_found: warn
+      #    
+      - name: 📁 Copy allure-history to gh-pages folder # Allure-history is from artifacts
+        run: |
+          mkdir -p gh-pages
+          if [ -d "gh-pages" ]; then
+            cp -r allure-history/. gh-pages/
+          fi
+    #
+      - name: 🔍 Inspect Root Folder
+        run: |
+          echo "📁 Contents of root:"
+          ls -la   
+    #
+      - name: 🔍 Inspect allure-history folder
+        run: |
+          echo "📁 Contents of allure-history folder:"
+          ls -la ./allure-history
+    #
+      - name: 🔍 Inspect allure-history/last-history folder
+        run: |
+          echo "📁 Contents of allure-history/last-history folder:"
+          ls -la ./allure-history/last-history
+    #
+      - name: 🔍 Inspect gh-pages folder
+        run: |
+          echo "📁 Contents of gh-pages folder:"
+          ls -la ./gh-pages
+      #
+      - name: 🔍 Inspect gh-pages/last-history folder
+        run: |
+          echo "📁 Contents of gh-pages/last-history folder:"
+          ls -la ./gh-pages/last-history
+      #
+      - name: 🔍 Inspect Allure Results folder
+        run: |
+          echo "📁 Contents of allure-resuts:"
+          ls -la ./allure-results
+    #      
+      - name: 📊 Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results
+          allure_report: allure-report
+          allure_history: allure-history
+          keep_reports: 5
+     #     
+      - name: 💾 Save History for Next Run
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: history-artifact
+          path: allure-history
+          retention-days: 5
+    #
+      - name: 🏗️ Setup Pages
+        uses: actions/configure-pages@v4
+    #
+      - name: 📤 Upload artifact for Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+    #
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+     # 
+      - name: 🔍 Inspect Root Folder
+        run: |
+          echo "📁 Contents of root"
+          ls -la   
+      #
+      - name: 🔍 Inspect Allure Results folder
+        run: |
+          echo "📁 Contents of allure-resuts:"
+          ls -la ./allure-results
+      #    
+      - name: 🔍 Inspect Allure Results/history folder
+        run: |
+          echo "📁 Contents of allure-resuts/history:"
+          ls -la ./allure-results/history
+      #    
+      - name: 🔍 Inspect Allure Report folder
+        run: |
+          echo "📁 Contents of allure-report:"
+          ls -la ./allure-report
+      #    
+      - name: 🔍 Inspect Allure Report/history folder
+        run: |
+          echo "📁 Contents of allure-report/history:"
+          ls -la ./allure-report/history
+      #   
+      - name: 🔍 Inspect allure-history folder
+        run: |
+          echo "📁 Contents of allure-history folder:"
+          ls -la ./allure-history
+      #
+      - name: 🔍 Inspect allure-history/last-history folder
+        run: |
+          echo "📁 Contents of allure-history/last-history folder:"
+          ls -la ./allure-history/last-history    
+      #          
+      - name: 🔍 Inspect GH Pages Folder
+        run: |
+          echo "📁 Contents of GH Pages:"
+          ls -la ./gh-pages
+          echo "📦 Size:"
+          du -sh allure-results 
+      #   
+
+         
+     
