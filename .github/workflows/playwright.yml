@@ -77,43 +77,43 @@ jobs:
         run: |
           mkdir -p allure-history/last-history
           mkdir -p gh-pages/last-history
-      #    if [ -d "gh-pages" ]; then
-      #      cp -r previous-history/. gh-pages/last-history
-      #    fi
+          if [ -d "gh-pages" ]; then
+            cp -r previous-history/. gh-pages/last-history
+          fi
     #
       - name: 🔍 Inspect Root Folder
         run: |
           echo "📁 Contents of root:"
           ls -la   
     #
-     # - name: 🔍 Inspect allure-history folder
-     #   run: |
-     #     echo "📁 Contents of allure-history folder:"
-     #     ls -la ./allure-history
+      - name: 🔍 Inspect allure-history folder
+        run: |
+          echo "📁 Contents of allure-history folder:"
+           ls -la ./allure-history
     #
-     # - name: 🔍 Inspect allure-history/last-history folder
-     #   run: |
-     #     echo "📁 Contents of allure-history/last-history folder:"
-     #     ls -la ./allure-history/last-history
+      - name: 🔍 Inspect allure-history/last-history folder
+        run: |
+          echo "📁 Contents of allure-history/last-history folder:"
+          ls -la ./allure-history/last-history
     #
-    #  - name: 🔍 Inspect Previous History folder
-    #    run: |
-    #      echo "📁 Contents of Previous History folder:"
-    #      ls -la ./previous-history
-   #   - name: 🔍 Inspect gh-pages folder
-   #     run: |
-   #       echo "📁 Contents of gh-pages folder:"
-   #       ls -la ./gh-pages
+      - name: 🔍 Inspect Previous History folder
+        run: |
+          echo "📁 Contents of Previous History folder:"
+          ls -la ./previous-history
+      - name: 🔍 Inspect gh-pages folder
+        run: |
+          echo "📁 Contents of gh-pages folder:"
+          ls -la ./gh-pages
       #
-   #   - name: 🔍 Inspect gh-pages/last-history folder
-   #     run: |
-   #       echo "📁 Contents of gh-pages/last-history folder:"
-   #       ls -la ./gh-pages/last-history
+      - name: 🔍 Inspect gh-pages/last-history folder
+        run: |
+          echo "📁 Contents of gh-pages/last-history folder:"
+          ls -la ./gh-pages/last-history
       #
-   #   - name: 🔍 Inspect Allure Results folder
-   #     run: |
-   #       echo "📁 Contents of allure-resuts:"
-   #       ls -la ./allure-results
+      - name: 🔍 Inspect Allure Results folder
+        run: |
+          echo "📁 Contents of allure-resuts:"
+          ls -la ./allure-results
     #      
       - name: 📊 Generate Allure Report
         uses: simple-elf/allure-report-action@master
@@ -171,7 +171,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: history-artifact
+          name: new-history-artifact
           path: allure-history/last-history
           retention-days: 5
     #
