@@ -68,7 +68,7 @@ jobs:
         with:
           workflow: playwright.yml
           workflow_conclusion: completed
-          name: history-artifact
+          name: new-history-artifact
           path: previous-history
           search_artifacts: true
           if_no_artifact_found: warn
@@ -123,31 +123,11 @@ jobs:
           allure_history: allure-history
           keep_reports: 5
      #     
-      - name: 💾 Save History for Next Run
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: history-artifact
-          path: allure-history/last-history
-          retention-days: 5
-    #
-      - name: 🏗️ Setup Pages
-        uses: actions/configure-pages@v4
-    #
-      - name: 📤 Upload artifact for Pages
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: allure-report
-    #
-      - name: 🚀 Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-     # 
       - name: 🔍 Inspect Root Folder
         run: |
           echo "📁 Contents of root"
           ls -la   
-      #
+     #
       - name: 🔍 Inspect Allure Results folder
         run: |
           echo "📁 Contents of allure-resuts:"
@@ -184,6 +164,31 @@ jobs:
           ls -la ./gh-pages
           echo "📦 Size:"
           du -sh allure-results 
+
+
+     
+      - name: 💾 Save History for Next Run
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: history-artifact
+          path: allure-history/last-history
+          retention-days: 5
+    #
+      - name: 🏗️ Setup Pages
+        uses: actions/configure-pages@v4
+    #
+      - name: 📤 Upload artifact for Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+    #
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+     # 
+     
+     
       #   
 
          
