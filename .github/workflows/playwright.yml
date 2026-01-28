@@ -68,7 +68,7 @@ jobs:
         with:
           workflow: playwright.yml
           workflow_conclusion: completed
-          name: new-history-artifact
+          name: hist-artifact
           path: previous-history
           search_artifacts: true
           if_no_artifact_found: warn
@@ -171,7 +171,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: new-history-artifact
+          name: hist-artifact
           path: allure-history/last-history
           retention-days: 5
     #
