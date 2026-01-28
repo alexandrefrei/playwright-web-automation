@@ -1,4 +1,4 @@
-name: Nightly Playwright Tests
+name: Nightly Playwright Tests - Full History
 
 on:
   schedule:
