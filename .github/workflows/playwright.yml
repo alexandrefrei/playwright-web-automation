@@ -97,10 +97,6 @@ jobs:
           echo "📁 Contents of allure-history/last-history folder:"
           ls -la ./allure-history/last-history
     #
-      - name: 🔍 Inspect Previous History folder
-        run: |
-          echo "📁 Contents of Previous History folder:"
-          ls -la ./previous-history
       - name: 🔍 Inspect gh-pages folder
         run: |
           echo "📁 Contents of gh-pages folder:"
