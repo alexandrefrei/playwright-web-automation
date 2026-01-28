@@ -74,10 +74,11 @@ jobs:
           if_no_artifact_found: warn
       #    
       - name: 📁 Copy allure-history to gh-pages folder # Allure-history is from artifacts
+        # Verify if the previous-history folder exist and there are files inside
         run: |
           mkdir -p allure-history/last-history
           mkdir -p gh-pages/last-history
-          if [ -d "gh-pages" ]; then
+          if [ -d "previous-history" ] && [ "$(ls -A previous-history)" ]; then 
             cp -r previous-history/. gh-pages/last-history
           fi
     #
