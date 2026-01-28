@@ -66,19 +66,19 @@ jobs:
         uses: dawidd6/action-download-artifact@v6
         continue-on-error: true
         with:
-          #workflow: ${{ steps.get_workflow_id.outputs.workflow_id }}
           workflow: playwright.yml
           workflow_conclusion: completed
           name: history-artifact
-          path: allure-history
+          path: previous-history
           search_artifacts: true
           if_no_artifact_found: warn
       #    
       - name: 📁 Copy allure-history to gh-pages folder # Allure-history is from artifacts
         run: |
-          mkdir -p gh-pages
+          mkdir -p allure-history/last-history
+          mkdir -p gh-pages/last-history
           if [ -d "gh-pages" ]; then
-            cp -r allure-history/. gh-pages/
+            cp -r previous-history/. gh-pages/last-history
           fi
     #
       - name: 🔍 Inspect Root Folder
@@ -91,11 +91,15 @@ jobs:
           echo "📁 Contents of allure-history folder:"
           ls -la ./allure-history
     #
-      - name: 🔍 Inspect allure-history/last-history folder
-        run: |
-          echo "📁 Contents of allure-history/last-history folder:"
-          ls -la ./allure-history/last-history
+    #  - name: 🔍 Inspect allure-history/last-history folder
+    #    run: |
+    #      echo "📁 Contents of allure-history/last-history folder:"
+    #      ls -la ./allure-history/last-history
     #
+      - name: 🔍 Inspect gh-pages folder
+        run: |
+          echo "📁 Contents of gh-pages folder:"
+          ls -la ./previous-history
       - name: 🔍 Inspect gh-pages folder
         run: |
           echo "📁 Contents of gh-pages folder:"
@@ -124,7 +128,7 @@ jobs:
         if: always()
         with:
           name: history-artifact
-          path: allure-history
+          path: allure-history/last-history
           retention-days: 5
     #
       - name: 🏗️ Setup Pages
