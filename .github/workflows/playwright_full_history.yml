@@ -150,39 +150,46 @@ jobs:
       - name: 🔍 Inspect Allure Results folder
         run: |
           echo "📁 Contents of allure-resuts:"
-          ls -la ./allure-results
-      #    
-      - name: 🔍 Inspect Allure Results/history folder
-        run: |
-          echo "📁 Contents of allure-resuts/history:"
-          ls -la ./allure-results/history
+          if [ -d "allure-results" ]; then
+            ls -la ./allure-results
+          fi
       #    
       - name: 🔍 Inspect Allure Report folder
         run: |
           echo "📁 Contents of allure-report:"
-          ls -la ./allure-report
+          if [ -d "allure-report" ]; then
+            ls -la ./allure-report
+          fi  
       #    
       - name: 🔍 Inspect Allure Report/history folder
         run: |
           echo "📁 Contents of allure-report/history:"
-          ls -la ./allure-report/history
+          if [ -d "allure-report/history" ]; then
+            ls -la ./allure-report/history
+          fi  
       #   
       - name: 🔍 Inspect allure-history folder
         run: |
           echo "📁 Contents of allure-history folder:"
-          ls -la ./allure-history
+          if [ -d "allure-history" ]; then
+            ls -la ./allure-history
+          fi  
       #
       - name: 🔍 Inspect allure-history/last-history folder
         run: |
           echo "📁 Contents of allure-history/last-history folder:"
-          ls -la ./allure-history/last-history    
+          if [ -d "allure-history/last-history " ]; then
+            ls -la ./allure-history/last-history   
+          fi  
       #          
       - name: 🔍 Inspect GH Pages Folder
         run: |
           echo "📁 Contents of GH Pages:"
-          ls -la ./gh-pages
-          echo "📦 Size:"
-          du -sh allure-results 
+          if [ -d "gh-pages" ]; then
+            ls -la ./gh-pages
+            echo "📦 Size:"
+            du -sh gh-pages
+          fi  
       #   
 
          
