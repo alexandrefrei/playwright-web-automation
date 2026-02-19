@@ -1,0 +1,112 @@
+name: Feature Branch Testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Feature branch to test (e.g., af/newtest/1234-new-feature)'
+        required: true
+        type: string
+      environment:
+        description: 'Test environment where feature is deployed'
+        required: true
+        type: choice
+        options:
+          - test-environment-1
+          - test-environment-2
+          - test-environment-3
+          - test-environment-4
+          - test-environment-5
+          - test-environment-6
+          - test-environment-7
+          - test-environment-8
+          - test-environment-9
+          - test-environment-10
+          - qa
+      test_file:
+        description: 'Path to test file (e.g., tests/block-question-tests/block-question-checkbox.spec.ts)'
+        required: true
+        type: string
+      default_browser:
+        description: 'Browser to use for tests'
+        required: false
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - edge
+          - firefox
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  feature-test:
+    timeout-minutes: 60
+    name: 🧪 Testing ${{ inputs.branch }} on ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout branch ${{ inputs.branch }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          lfs: true
+      #
+      - name: 📦 Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+      #
+      - name: 📦 Install dependencies
+        run: npm ci
+      #
+      - name: 🗄️ Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      #
+      - name: 🖥️ Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      #
+      - name: 🧾 Run test file
+        run: |
+          echo "🌿 Branch: ${{ inputs.branch }}"
+          echo "🌍 Environment: ${{ inputs.environment }}"
+          echo "📄 Test file: ${{ inputs.test_file }}"
+          echo "🌐 Browser: ${{ inputs.default_browser }}"
+          npx playwright test "${{ inputs.test_file }}"
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          DEFAULT_BROWSER: ${{ inputs.default_browser }}
+      #
+      - name: 📤 Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ github.run_number }}
+          path: playwright-report/
+          retention-days: 7
+      #
+      - name: 📤 Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ github.run_number }}
+          path: test-results/
+          retention-days: 7
+      #
+      - name: 📊 Test Summary
+        if: always()
+        run: |
+          echo "## 🧪 Feature Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ inputs.branch }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment:** \`${{ inputs.environment }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Test File:** \`${{ inputs.test_file }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Browser:** \`${{ inputs.default_browser }}\`" >> $GITHUB_STEP_SUMMARY
