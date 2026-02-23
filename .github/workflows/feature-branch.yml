@@ -28,14 +28,14 @@ on:
         required: true
         type: string
       default_browser:
-        description: 'Browser to use for tests'
+        description: 'Browser engine for tests'
         required: false
-        default: 'chrome'
+        default: 'chromium'
         type: choice
         options:
-          - chrome
-          - edge
+          - chromium
           - firefox
+          - webkit
 
 permissions:
   contents: read
@@ -63,13 +63,16 @@ jobs:
       #
       - name: 🧾 Run test file
         run: |
-          echo "🌿 Branch: ${{ inputs.branch }}"
-          echo "🌍 Environment: ${{ inputs.environment }}"
-          echo "📄 Test file: ${{ inputs.test_file }}"
-          echo "🌐 Browser: ${{ inputs.default_browser }}"
-          npx playwright test "${{ inputs.test_file }}"
+          echo "🌿 Branch: $BRANCH_NAME"
+          echo "🌍 Environment: $ENVIRONMENT"
+          echo "📄 Test file: $TEST_FILE"
+          echo "🌐 Browser: $DEFAULT_BROWSER"
+
+          npx playwright test "$TEST_FILE"
         env:
+          BRANCH_NAME: ${{ inputs.branch }}
           ENVIRONMENT: ${{ inputs.environment }}
+          TEST_FILE: ${{ inputs.test_file }}
           DEFAULT_BROWSER: ${{ inputs.default_browser }}
       #
       - name: 📤 Upload Playwright Report
