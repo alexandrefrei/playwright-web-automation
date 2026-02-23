@@ -45,7 +45,7 @@ permissions:
 jobs:
   feature-test:
     timeout-minutes: 60
-    name: 🧪 Testing ${{ inputs.branch }} on ${{ inputs.environment }}
+    name: 🧪 Execution ${{ inputs.branch }} on ${{ inputs.environment }}
     runs-on: ubuntu-latest
 
     steps:
