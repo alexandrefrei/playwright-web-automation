@@ -63,6 +63,7 @@ jobs:
       #
       - name: 🧾 Run test file
         run: |
+          echo "🔍 Starting execution..."
           echo "🌿 Branch: $BRANCH_NAME"
           echo "🌍 Environment: $ENVIRONMENT"
           echo "📄 Test file: $TEST_FILE"
