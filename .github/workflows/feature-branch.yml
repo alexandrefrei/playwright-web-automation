@@ -1,5 +1,25 @@
 name: Feature Branch Testing
 
+run-name: >
+  ${{
+    github.event_name == 'workflow_dispatch' && 
+      (inputs.release_name != '' && 
+        format('Playwright Tests - Release {0} - {1}', inputs.release_name, inputs.environment) 
+        || 'Playwright Tests')
+
+    || github.event_name == 'pull_request' &&
+        format('PR #{0} - {1} → {2}', github.event.number, github.head_ref, github.base_ref)
+
+    || github.event_name == 'push' && 
+        startsWith(github.event.head_commit.message, 'Merge pull request') &&
+        format('Merge PR - {0}', github.event.head_commit.message)
+
+    || github.event_name == 'push' &&
+        format('Push - {0}', github.ref_name)
+
+    || 'Playwright Tests'
+  }}
+
 on:
   workflow_dispatch:
     inputs:
@@ -34,6 +54,10 @@ on:
         type: choice
         options:
           - chrome
+      release_version:
+        description: 'Optional release version (e.g. 2.2.4)'
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -42,7 +66,6 @@ permissions:
 
 jobs:
   feature-test:
-    timeout-minutes: 60
     name: 🧪 Execution ${{ inputs.branch }} on ${{ inputs.environment }}
     runs-on: ubuntu-latest
 
