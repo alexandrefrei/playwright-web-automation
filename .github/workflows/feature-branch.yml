@@ -8,12 +8,12 @@ run-name: >
         || 'Playwright Tests')
 
     || github.event_name == 'pull_request' &&
-        format('PR #{0} - {1} → main', github.event.number, github.head_ref)
+        format('PR #{0} - {1}', github.event.number, github.head_ref)
 
     || github.event_name == 'push' && 
         github.ref_name == 'main' &&
         startsWith(github.event.head_commit.message, 'Merge pull request') &&
-        format('Main ← {0}', github.event.head_commit.message)
+        format('{0} → main', github.event.head_commit.message)
 
     || github.event_name == 'push' &&
         format('Branch - {0}', github.ref_name)
