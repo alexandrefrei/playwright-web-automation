@@ -3,8 +3,8 @@ name: Feature Branch Testing
 run-name: >
   ${{
     github.event_name == 'workflow_dispatch' && 
-      (inputs.release_name != '' && 
-        format('Playwright Tests - Release {0} - {1}', inputs.release_name, inputs.environment) 
+      (inputs.release_version != '' && 
+        format('🚀 Playwright Tests - Release {0} - {1}', inputs.release_version, inputs.environment) 
         || 'Playwright Tests')
 
     || github.event_name == 'pull_request' &&
@@ -19,6 +19,7 @@ run-name: >
 
     || 'Playwright Tests'
   }}
+
 
 on:
   workflow_dispatch:
@@ -58,6 +59,7 @@ on:
         description: 'Optional release version (e.g. 2.2.4)'
         required: false
         type: string
+
 
 permissions:
   contents: read
