@@ -28,14 +28,12 @@ on:
         required: true
         type: string
       default_browser:
-        description: 'Browser engine for tests'
+        description: 'Default browser for tests'
         required: false
-        default: 'chromium'
+        default: 'chrome'
         type: choice
         options:
-          - chromium
-          - firefox
-          - webkit
+          - chrome
 
 permissions:
   contents: read
