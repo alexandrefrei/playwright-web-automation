@@ -59,7 +59,15 @@ jobs:
         run: npm install
       #  
       - name: 🖥️ Install Playwright Browsers
-        run: npx playwright install
+        run: |
+          BROWSER="${{ inputs.default_browser }}"
+          if [ "$BROWSER" == "chrome" ]; then
+            echo "Installing chromium for chrome input..."
+            npx playwright install chromium --with-deps
+          else
+          echo "Installing $BROWSER..."
+           npx playwright install "$BROWSER" --with-deps
+          fi
       #
       - name: 🧾 Run test file
         run: |
