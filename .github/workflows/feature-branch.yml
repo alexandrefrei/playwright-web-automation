@@ -5,7 +5,7 @@ run-name: >
     github.event_name == 'workflow_dispatch' && 
       (inputs.release_version != '' && 
         format('🚀 Playwright Tests - Release: {0} - Env: {1}', inputs.release_version, inputs.environment) 
-        || 'Playwright Tests')
+        || 'Playwright Tests - Manual Run')
 
     || github.event_name == 'pull_request' &&
         format('PR #{0} - {1}', github.event.number, github.head_ref)
