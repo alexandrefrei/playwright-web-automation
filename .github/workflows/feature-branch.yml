@@ -29,15 +29,12 @@ on:
     branches: [main, master]
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Feature branch to test (e.g., af/newtest/1234-new-feature)'
-        required: true
-        type: string
       environment:
         description: 'Test environment where feature is deployed'
         required: true
         type: choice
         options:
+          - qa
           - test-environment-1
           - test-environment-2
           - test-environment-3
@@ -48,18 +45,19 @@ on:
           - test-environment-8
           - test-environment-9
           - test-environment-10
-          - qa
-      test_file:
+      test_filter:
         description: 'Path to test file (e.g., tests/block-question-tests/block-question-checkbox.spec.ts)'
         required: true
         type: string
       default_browser:
-        description: 'Default browser for tests'
+        description: 'Browser engine for tests'
         required: false
         default: 'chrome'
         type: choice
         options:
           - chrome
+          - firefox
+          - webkit
       release_version:
         description: 'Optional release version (e.g. 2.2.4)'
         required: false
@@ -73,14 +71,13 @@ permissions:
 
 jobs:
   feature-test:
-    name: 🧪 Execution ${{ inputs.branch }} on ${{ inputs.environment }}
+    name: 🧪 Execution ${{ github.ref_name }} on ${{ inputs.environment }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📦 Checkout branch ${{ inputs.branch }}
+      - name: 📦 Checkout branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch }}
           lfs: true
       #
       - name: 📦 Install dependencies
@@ -97,7 +94,7 @@ jobs:
            npx playwright install "$BROWSER" --with-deps
           fi
       #
-      - name: 🧾 Run test file
+      - name: 🧾 Run Playwright test
         run: |
           echo "🔍 Starting execution..."
           echo "🌿 Branch: $BRANCH_NAME"
@@ -107,9 +104,9 @@ jobs:
 
           npx playwright test "$TEST_FILE"
         env:
-          BRANCH_NAME: ${{ inputs.branch }}
+          BRANCH_NAME: ${{ github.ref_name }}
           ENVIRONMENT: ${{ inputs.environment }}
-          TEST_FILE: ${{ inputs.test_file }}
+          TEST_FILE: ${{ inputs.test_filter }}
           DEFAULT_BROWSER: ${{ inputs.default_browser }}
       #
       - name: 📤 Upload Playwright Report
@@ -133,7 +130,7 @@ jobs:
         run: |
           echo "## 🧪 Feature Test Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Branch:** \`${{ inputs.branch }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Environment:** \`${{ inputs.environment }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Test File:** \`${{ inputs.test_file }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Test File:** \`${{ inputs.test_filter }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Browser:** \`${{ inputs.default_browser }}\`" >> $GITHUB_STEP_SUMMARY
