@@ -108,6 +108,9 @@ jobs:
           TEST_ENVIRONMENT: ${{ inputs.environment }}
           TEST_FILE: ${{ inputs.test_filter }}
           DEFAULT_BROWSER: ${{ inputs.default_browser }}
+
+          # AQUI usamos env no CI para determinar quais sao os valores que precisamos usar no arquivo .env
+          # Eh feito espelhamento entre o env do CI com o arquivo .env
       #
       - name: 📤 Upload Playwright Report
         uses: actions/upload-artifact@v4
