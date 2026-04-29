@@ -105,7 +105,7 @@ jobs:
           npx playwright test "$TEST_FILE"
         env:
           BRANCH_NAME: ${{ github.ref_name }}
-          ENVIRONMENT: ${{ inputs.environment }}
+          TEST_ENVIRONMENT: ${{ inputs.environment }}
           TEST_FILE: ${{ inputs.test_filter }}
           DEFAULT_BROWSER: ${{ inputs.default_browser }}
       #
