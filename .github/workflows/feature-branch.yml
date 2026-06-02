@@ -30,7 +30,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Test environment where feature is deployed'
+        description: 'Environment where feature is deployed:'
         required: true
         type: choice
         options:
@@ -50,7 +50,7 @@ on:
         required: true
         type: string
       default_browser:
-        description: 'Browser engine for tests'
+        description: 'Browser engine for tests:'
         required: false
         default: 'chrome'
         type: choice
@@ -59,7 +59,7 @@ on:
           - firefox
           - webkit
       release_version:
-        description: 'Optional release version (e.g. 2.2.4)'
+        description: 'Optional release version (e.g. 26.3.1)'
         required: false
         type: string
 
