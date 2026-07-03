@@ -15,7 +15,7 @@ permissions:
 jobs:
   Run_Test:
     timeout-minutes: 90
-    name: 🧪 Running E2E tests
+    name: 🧪 Running E2E test
     runs-on: ubuntu-latest
     steps:
       - name: Get current date
@@ -34,7 +34,7 @@ jobs:
       - name: 🖥️ Install Playwright Browsers
         run: npx playwright install
       #  
-      - name: 🧾 Run Playwright tests
+      - name: 🧾 Run Playwright test
         run: npx playwright test
       #    
       - name: 📤 Upload Allure Results
