@@ -43,10 +43,6 @@ const getWorkerCount = (): number | undefined => {
 export const getCredentials = (): UserCredentials => {
   const username = process.env.USERNAME;
   const password = process.env.PASSWORD;
-  console.log(` Setting Config -> Username: ${process.env.USERNAME} `);
-  console.log(` Setting Config -> User: ${username} `);
-  
-
   if (!username || !password) {
     throw new Error(
       `Missing required E2E credentials. Add them to your .env file (see .env-example).`,
