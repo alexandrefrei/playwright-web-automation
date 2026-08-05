@@ -35,16 +35,6 @@ on:
         type: choice
         options:
           - qa
-          - test-environment-1
-          - test-environment-2
-          - test-environment-3
-          - test-environment-4
-          - test-environment-5
-          - test-environment-6
-          - test-environment-7
-          - test-environment-8
-          - test-environment-9
-          - test-environment-10
       test_filter:
         description: 'Path to test file (e.g., tests/block-question-tests/block-question-checkbox.spec.ts)'
         required: true
@@ -104,6 +94,8 @@ jobs:
 
           npx playwright test "$TEST_FILE"
         env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
           BRANCH_NAME: ${{ github.ref_name }}
           TEST_ENVIRONMENT: ${{ inputs.environment }}
           TEST_FILE: ${{ inputs.test_filter }}
