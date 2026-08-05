@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('Login Page', () => {
   test('Verify the login page with valid email and password', {tag: '@smoke' } , async () => {
     console.log(` *** Environment: ${process.env.TEST_ENV!}`);
-    console.log(` *** Username: ${USERNAME} `);
+    console.log(` *** Username: ${process.env.USERNAME!} `);
     //const baseURL = test.info().project.use.baseURL!; //How to access the baseURL inside the test
 
     await test.step('Log in', async () => {
