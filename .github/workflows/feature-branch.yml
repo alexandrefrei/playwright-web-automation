@@ -88,9 +88,10 @@ jobs:
         run: |
           echo "🔍 Starting execution..."
           echo "🌿 Branch: $BRANCH_NAME"
-          echo "🌍 Environment: $ENVIRONMENT"
+          echo "🌍 Environment: $TEST_ENV"
           echo "📄 Test file: $TEST_FILE"
           echo "🌐 Browser: $DEFAULT_BROWSER"
+          echo " USERNAME: $USERNAME"
 
           npx playwright test "$TEST_FILE"
         env:
