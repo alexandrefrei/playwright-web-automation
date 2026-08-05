@@ -4,6 +4,8 @@ import { getCredentials } from '../../../support/utils/settingsConfig';
 import * as allure from 'allure-js-commons'
 
 let loginPage: LoginPage;
+let USERNAME: string;
+let PASSWORD: string;
 
 test.beforeEach(async ({ page }) => {
   await allure.parentSuite('Login')
