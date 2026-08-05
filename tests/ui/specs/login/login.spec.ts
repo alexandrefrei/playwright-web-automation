@@ -4,13 +4,13 @@ import { getCredentials } from '../../../support/utils/settingsConfig';
 import * as allure from 'allure-js-commons'
 
 let loginPage: LoginPage;
-let USERNAME: string;
-let PASSWORD: string;
+let username: string;
+let password: string;
 
 test.beforeEach(async ({ page }) => {
   await allure.parentSuite('Login')
   await page.goto('/');
- ({ USERNAME, PASSWORD } = getCredentials());
+ ({ username, password } = getCredentials());
 
   loginPage = new LoginPage(page);
 });
@@ -19,17 +19,17 @@ test.describe('Login Page', () => {
   test('Verify the login page with valid email and password', {tag: '@smoke' } , async () => {
     console.log(` *** Environment: ${process.env.TEST_ENV!}`);
     console.log(` ### Username: ${process.env.USERNAME} `);
-    console.log(` @@@@ User: ${USERNAME} `);
+    console.log(` @@@@ User: ${username} `);
     //const baseURL = test.info().project.use.baseURL!; //How to access the baseURL inside the test
-    await loginPage.loginUI(USERNAME, PASSWORD);
+    await loginPage.loginUI(username, password);
   });
 
   test('Verify the login page with invalid email', async () => {
-    await loginPage.loginUI('invalid', PASSWORD);
+    await loginPage.loginUI('invalid', password);
     await loginPage.checkInvalidCredentials();
   });
   test('Verify the login page with invalid password', async () => {
-    await loginPage.loginUI(USERNAME, 'invalid');
+    await loginPage.loginUI(username, 'invalid');
     await loginPage.checkInvalidCredentials();
   });
 });
