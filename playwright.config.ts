@@ -1,114 +1,103 @@
-import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
-import type { GitHubActionOptions } from '@estruyf/github-actions-reporter'
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-//require('dotenv').config();
-//dotenv.config();
+import type { GitHubActionOptions } from '@estruyf/github-actions-reporter';
+import { defineConfig, devices, type ReporterDescription } from '@playwright/test';
+import { getCurrentEnvironment } from './tests/configs/environmentsConfig';
+import { settings, validateSettings } from './tests/configs/settingsConfig';
 
-if (process.env.test_env) {
-  console.log(`Environment: ${process.env.test_env}`);
-  dotenv.config({
-    path: `.env.${process.env.test_env}`,
-    override: true,
-  });
-} else {
-  dotenv.config();
+
+// Validate settings
+validateSettings();
+
+const TEST_ENV = getCurrentEnvironment().name;
+
+// Reporters
+const reporters: ReporterDescription[] = [
+  ['allure-playwright', { resultsDir: 'allure-results' }],
+  ['html', { outputFolder: 'playwright-report', open: 'never' }],
+  ['json', { outputFile: 'test-results/results.json' }],
+  ['line'],
+];
+
+// The GitHub Actions reporter writes to the Actions job summary and only works
+// inside that runtime. Run locally it throws "__dirname is not defined" (it
+// relies on CommonJS globals that don't exist under our ESM config) and
+// pollutes every run's output, so gate it behind the CI env flag.
+if (process.env.CI) {
+  reporters.push([
+    '@estruyf/github-actions-reporter',
+    <GitHubActionOptions>{
+      title: 'Playwright Test Report',
+      useDetails: true,
+      showError: true,
+    },
+  ]);
 }
-
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 1 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [
-    ['allure-playwright', { outputFolder: 'allure-results' }],
-    [
-      '@estruyf/github-actions-reporter',
-      <GitHubActionOptions>{
-        title: 'Playwright Test Report',
-        useDetails: true,
-        showError: true,
-      },
-    ],
-    ['json', { outputFile: 'test-results/results.json' }],
-    ['junit', { outputFile: 'test-results/junit-results.xml' }],
-  ],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  retries: process.env.CI ? 2 : 0,
+  /* Match worker count to available CPU cores */
+  workers: settings.workers,
+  /* Global timeout for entire test run (15 minutes for DST tests in CI only) */
+  globalTimeout: process.env.CI && TEST_ENV === 'local' ? 900000 : undefined, // DST tests only (TEST_ENV=local)
+
+  reporter: reporters,
+  /* Timeout varies by test type:
+   * - DST tests (local): 15s (fast, no network calls)
+   * - E2E tests (qa): 60s (slower, real network calls)
+   * Individual tests can override with test.setTimeout() */
+  timeout: 60000,
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.ENVIRONMENT === 'Staging' ? process.env.URL : '',
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    baseURL: settings.baseURL,
+    headless: process.env.CI ? true : false,
+    actionTimeout: 60000,
     trace: 'on-first-retry',
-
-    testIdAttribute: 'data-test',
+    /* Capture screenshot on failure */
+    screenshot: 'only-on-failure',
+    /* Record video on failure */
+    video: 'retain-on-failure',
+    bypassCSP: true,
+    launchOptions: {
+      args: [
+        '--disable-web-security', // Disable CORS for testing
+        '--disk-cache-size=1', // Minimize disk cache to reduce I/O
+        '--media-cache-size=1', // Minimize media cache
+      ],
+    },
+    /* Use persistent context for DST tests to cache browser state and reduce cold start overhead */
+    /* Only use Chrome channel locally - CI uses bundled Chromium from Docker image */
+    ...(TEST_ENV === 'local' && !process.env.CI ? {
+      channel: 'chrome', // Use system Chrome for better caching (local only)
+    } : {}),
   },
-  timeout: 6000,
+  expect: {
+    timeout: 30000,  // Increase the default timeout for expect assertions globally
+    // Visual comparison settings
 
-  /** Folder for test artifacts such as screenshots, vides, traces, etc */
-  //outputDir: 'test-results',
-
-  /* Configure projects for major browsers */
+    toHaveScreenshot: {
+      threshold: 0.2,
+    },
+    toMatchSnapshot: {
+      threshold: 0.2,
+    },
+  },
+ 
   projects: [
     {
       name: 'default',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    /*
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    }, */
-    /*
-    {
-      name: 'local',
+      testMatch: '**/*.spec.ts',
       use: {
-        baseURL: baseEnvUrl.local.name,
-      }
-    },*/
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+        ...devices['Desktop Chrome'],
+        // DST tests (local) start unauthenticated; E2E tests (qa) reuse saved login session
+        storageState: TEST_ENV === 'local'
+          ? 'tests/.auth/unauthenticated.json'
+          : 'tests/.auth/authenticated.json',
+      },
+    },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });
