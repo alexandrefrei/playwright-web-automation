@@ -93,10 +93,6 @@ export default defineConfig({
       testMatch: '**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
-        // DST tests (local) start unauthenticated; E2E tests (qa) reuse saved login session
-        storageState: TEST_ENV === 'local'
-          ? 'tests/.auth/unauthenticated.json'
-          : 'tests/.auth/authenticated.json',
       },
     },
   ],
