@@ -34,7 +34,7 @@ on:
         required: true
         type: choice
         options:
-          - qa
+          - QA
       test_filter:
         description: 'Path to test file (e.g., tests/block-question-tests/block-question-checkbox.spec.ts)'
         required: true
