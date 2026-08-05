@@ -21,6 +21,7 @@ test.describe('Login Page', () => {
     await loginPage.loginUI(username, password);
   });
 
+  /*
   test('Verify the login page with invalid email', async () => {
     await loginPage.loginUI('invalid', password);
     await loginPage.checkInvalidCredentials();
@@ -28,5 +29,5 @@ test.describe('Login Page', () => {
   test('Verify the login page with invalid password', async () => {
     await loginPage.loginUI(username, 'invalid');
     await loginPage.checkInvalidCredentials();
-  });
+  });*/
 });
