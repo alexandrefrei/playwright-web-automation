@@ -11,9 +11,9 @@ export type Environment = {
 export const environments: Environment[] = [
   // Local Development Environment
   {
-    name: 'local',
-    baseURL: 'http://localhost:5173',
-    description: 'Local Development Environment',
+    name: 'QA',
+    baseURL: 'https://www.saucedemo.com/',
+    description: 'QA Development Environment',
   },
 ];
 
