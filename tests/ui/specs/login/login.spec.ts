@@ -20,8 +20,7 @@ test.describe('Login Page', () => {
     //const baseURL = test.info().project.use.baseURL!; //How to access the baseURL inside the test
     await loginPage.loginUI(username, password);
   });
-
-  /*
+  
   test('Verify the login page with invalid email', async () => {
     await loginPage.loginUI('invalid', password);
     await loginPage.checkInvalidCredentials();
@@ -29,5 +28,5 @@ test.describe('Login Page', () => {
   test('Verify the login page with invalid password', async () => {
     await loginPage.loginUI(username, 'invalid');
     await loginPage.checkInvalidCredentials();
-  });*/
+  });
 });
