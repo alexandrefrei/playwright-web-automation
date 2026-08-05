@@ -1,7 +1,7 @@
 import type { GitHubActionOptions } from '@estruyf/github-actions-reporter';
 import { defineConfig, devices, type ReporterDescription } from '@playwright/test';
-import { getCurrentEnvironment } from './tests/configs/environmentsConfig';
-import { settings, validateSettings } from './tests/configs/settingsConfig';
+import { getCurrentEnvironment } from './tests/support/utils/environmentsConfig';
+import { settings, validateSettings } from './tests/support/utils/settingsConfig';
 
 
 // Validate settings
