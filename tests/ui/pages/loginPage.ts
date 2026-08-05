@@ -47,7 +47,7 @@ export default class LoginPage {
     this.buttonLogin = page.locator('input#login-button');
 
     this.errorMessage = page.locator("h3[data-test='error']");
-    this.errorMessage = page.getByTestId('error');
+    //this.errorMessage = page.getByTestId('error');
   }
 
   async loginUI(userEmail: string, password: string) {
