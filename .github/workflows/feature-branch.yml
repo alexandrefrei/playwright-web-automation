@@ -91,7 +91,12 @@ jobs:
           echo "🌍 Environment: $TEST_ENV"
           echo "📄 Test file: $TEST_FILE"
           echo "🌐 Browser: $DEFAULT_BROWSER"
-          echo " USERNAME: $USERNAME"
+          if [ -z "$USERNAME" ]; then
+            echo "O secret não está definido ou está vazio!"
+          exit 1
+          else
+            echo "O secret está configurado corretamente."
+          fi
 
           npx playwright test "$TEST_FILE"
         env:
@@ -101,6 +106,9 @@ jobs:
           TEST_ENV: ${{ inputs.environment }}
           TEST_FILE: ${{ inputs.test_filter }}
           DEFAULT_BROWSER: ${{ inputs.default_browser }}
+
+          run: |
+      
 
           # AQUI usamos env no CI para determinar quais sao os valores que precisamos usar no arquivo .env
           # Eh feito espelhamento entre o env do CI com o arquivo .env
