@@ -41,8 +41,8 @@ const getWorkerCount = (): number | undefined => {
 };
 
 export const getCredentials = (): UserCredentials => {
-  const username = process.env.PWA_E2E_USERNAME;
-  const password = process.env.PWA_E2E_PASSWORD;
+  const username = process.env.USERNAME;
+  const password = process.env.PASSWORD;
 
   if (!username || !password) {
     throw new Error(
@@ -53,7 +53,7 @@ export const getCredentials = (): UserCredentials => {
   return {
     username: username,
     password: password,
-    email: process.env.PWA_E2E_EMAIL || '',
+    email: process.env.EMAIL || '',
   };
 };
 
